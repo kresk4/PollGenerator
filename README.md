@@ -19,4 +19,4 @@ Serwis nasłuchuje na porcie 3000.
 link do swaggera:
 [a link](http://petstore.swagger.io/#/)
 następnie wpisz w oknie:
-```sh (http://localhost:3000/swagger.json) ```
+```(http://localhost:3000/swagger.json) ```
