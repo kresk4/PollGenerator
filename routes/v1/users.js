@@ -33,7 +33,7 @@ module.exports = (router) => {
         UserServices.createUser(req.body)
             .then(() => res.sendStatus(201))
             .catch((err) => {
-                return res.status(401).json({err})
+                return res.status(401).json({error: err.message})
             })
     });
 
@@ -73,7 +73,9 @@ module.exports = (router) => {
                 });
                 res.sendStatus(200)
             })
-            .catch((err) => res.status(401).json(err))
+            .catch((err) => {
+                return res.status(401).json({error: err.message})
+            })
     });
 
     /**

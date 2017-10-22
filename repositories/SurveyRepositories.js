@@ -8,13 +8,14 @@ class SurveyRepositories {
      * @param {integer} userId
      * @return Promise.<integer> surveyId
      */
-    static createSurver(name, endDate, userId) {
+    static createSurver(name, endDate, countOfAnswers, userId) {
         return knex('survey')
             .returning('id')
             .insert({
                 name,
                 endDate,
                 userId,
+                countOfAnswers,
             })
             .then(res => res[0]);
     }
@@ -27,6 +28,19 @@ class SurveyRepositories {
         return knex('survey')
             .returning('*')
             .where({userId})
+    }
+
+    static getSurvey(surveyId) {
+        return knex('survey')
+            .returning('*')
+            .where({id: surveyId})
+    }
+
+    static decrementSurveyCountOfAnswers(surveyId) {
+        return knex('survey')
+            .returning('*')
+            .where({id: surveyId})
+            .decrement('countOfAnswers', 1);
     }
 
 }

@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
         table.increments();
         table.string('name');
         table.timestamp('endDate');
+        table.integer('countOfAnswers')
         table.integer('userId').references('users.id');
     });
 };

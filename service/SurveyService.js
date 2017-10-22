@@ -9,9 +9,9 @@ class SurveyService {
      * @param {string} endDate
      * @return Promise.<>
      */
-    static createSurvey({name, endDate, queries}, userId) {
+    static createSurvey({name, endDate, countOfAnswers, queries}, userId) {
         let surveyId
-        return SurveyRepositories.createSurver(name, endDate, userId)
+        return SurveyRepositories.createSurver(name, endDate, countOfAnswers, userId)
             .then((id) => {
                 surveyId = id
                 return QueryRepositories.createQueries(queries, id)
@@ -37,6 +37,22 @@ class SurveyService {
                             return Object.assign(query, {answers})
                         })
                 }))
+            })
+    }
+
+    static postAnswerToSurvey(surveyId, answers) {
+        return SurveyRepositories.getSurvey(surveyId)
+            .then((res) => {
+                if(!res.length) {
+                    throw new Error('Survey not found')
+                }
+                if(res[0].countOfAnswers === 0) {
+                    throw new Error('This survey is close')
+                }
+                return AnswerRepositories.postAnswers(answers)
+                    .then(() => {
+                        return SurveyRepositories.decrementSurveyCountOfAnswers(surveyId)
+                    })
             })
     }
 }

@@ -1,6 +1,5 @@
 const validation = require('express-validation');
 const Joi = require('joi');
-const UserServices = require('service/UserService');
 const SurveyService = require('service/SurveyService');
 const {authorized} = require('components/UserAuthorize');
 
@@ -30,6 +29,7 @@ module.exports = (router) => {
         body: {
             name: Joi.string().required(),
             endDate: Joi.date().required(),
+            countOfAnswers: Joi.number().integer(),
             queries: Joi.array().items(Joi.object({
                 query: Joi.string().required(),
                 answers: Joi.array().items(Joi.object({
@@ -41,7 +41,7 @@ module.exports = (router) => {
         return SurveyService.createSurvey(req.body, req.userId)
         .then((surveyId) => res.status(201).json({surveyId}))
         .catch((err) => {
-            return res.status(401).json({err})
+            return res.status(401).json({error: err.message})
         })
     });
 
@@ -64,7 +64,7 @@ module.exports = (router) => {
             res.status(201).json(surveys)
         })
         .catch((err) => {
-            return res.status(401).json({err})
+            return res.status(401).json({error: err.message})
         })
     });
 
@@ -87,13 +87,49 @@ module.exports = (router) => {
      *       204:
      *         description: success
      */
-    router.get('/query/:surveyId', authorized, (req, res) => {
+    router.get('/query/:surveyId', (req, res) => {
         return SurveyService.getSurveysQuestionWithAnswers(req.params.surveyId)
             .then((queries) => {
                 res.status(201).json({queries})
             })
             .catch((err) => {
-                return res.status(401).json({err})
+                return res.status(401).json({error: err.message})
+            })
+    });
+
+    /**
+     * @swagger
+     * /v1/answers/{surveyId}:
+     *   post:
+     *     tags:
+     *       - Survey
+     *     summary: post answers from survey
+     *     parameters:
+     *       - name: surveyId
+     *         description: survey id
+     *         in: path
+     *         required: true
+     *         type: integer
+     *       - name: answers
+     *         description: answers
+     *         in: body
+     *         required: true
+     *         type: object
+     *         schema:
+     *           $ref: '#/definitions/Answers'
+     *     responses:
+     *       400:
+     *         $ref: '#/responses/400'
+     *       204:
+     *         description: success
+     */
+    router.post('/answers/:surveyId', (req, res) => {
+        return SurveyService.postAnswerToSurvey(req.params.surveyId, req.body)
+            .then(() => {
+                return res.sendStatus(204)
+            })
+            .catch((err) => {
+                return res.status(401).json({error: err.message})
             })
     });
 };

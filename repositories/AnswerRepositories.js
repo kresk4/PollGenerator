@@ -8,6 +8,7 @@ class AnswerRepositories {
                 return {
                     answer: answer.answer,
                     queryId: query.id,
+                    answerCount: 0,
                 }
             })
         })
@@ -22,7 +23,6 @@ class AnswerRepositories {
     static createAnswer(queries) {
         const answersRows = AnswerRepositories.generateAnswersObjects(queries);
         return Promise.all(answersRows.map((row) => {
-            console.log(row)
             return knex('answer')
                 .returning('*')
                 .insert(row)
@@ -36,6 +36,17 @@ class AnswerRepositories {
             .where({
                 queryId,
             })
+    }
+
+    static postAnswers(answers) {
+        return Promise.all(answers.map((answer) => {
+            return knex('answer')
+                .where({
+                    id: answer.answerId,
+                    queryId: answer.queryId
+                })
+                .increment('answerCount', 1)
+        }))
     }
 }
 

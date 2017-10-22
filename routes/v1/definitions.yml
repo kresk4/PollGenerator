@@ -15,6 +15,8 @@ definitions:
         endDate:
           type: string
           format: date
+        countOfAnswers:
+          type: integer
         queries:
           type: array
           items:
@@ -35,3 +37,17 @@ definitions:
     properties:
       answer:
         type: string
+
+  Answers:
+    type: array
+    items:
+      $ref: '#/definitions/AnswerObject'
+
+
+  AnswerObject:
+    type: object
+    properties:
+      queryId:
+        type: integer
+      answerId:
+        type: integer
