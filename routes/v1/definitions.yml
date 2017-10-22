@@ -1,0 +1,37 @@
+definitions:
+  CreateUser:
+    type: object
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+
+  CreateSurvey:
+      type: object
+      properties:
+        name:
+          type: string
+        endDate:
+          type: string
+          format: date
+        queries:
+          type: array
+          items:
+            $ref: '#/definitions/Query'
+
+  Query:
+    type: object
+    properties:
+      query:
+        type: string
+      answers:
+        type: array
+        items:
+          $ref: '#/definitions/Answer'
+
+  Answer:
+    type: object
+    properties:
+      answer:
+        type: string

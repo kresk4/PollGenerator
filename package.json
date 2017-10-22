@@ -1,0 +1,37 @@
+{
+  "name": "ankiety",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "nodemon server.js",
+    "eslint": "eslint .",
+    "migrate": "knex migrate:latest",
+    "test": "NODE_PATH=. jest --coverage"
+  },
+  "author": "",
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "body-parser": "~1.16.0",
+    "cookie-parser": "^1.4.3",
+    "express": "~4.14.1",
+    "express-validation": "^1.0.2",
+    "joi": "^10.4.1",
+    "knex": "^0.13.0",
+    "lodash.zipwith": "^4.2.0",
+    "pg-promise": "^5.6.4",
+    "randomstring": "^1.1.5",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0",
+    "swagger-jsdoc": "^1.9.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-google": "^0.7.1",
+    "jest": "^19.0.2"
+  },
+  "license": "ISC"
+}
